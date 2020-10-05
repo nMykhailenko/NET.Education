@@ -1,4 +1,5 @@
 ﻿using Authentication.Services.Contract;
+using Authentication.Settings;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,14 @@ namespace Authentication.Controllers
         /// Our DI for settings service.
         /// </summary>
         private readonly ISettingsService _settingsService;
+        private readonly ICacheService<AzureAdSettings> _cacheService;
         
-        public SettingsController(ISettingsService settingsService)
+        public SettingsController(
+            ISettingsService settingsService,
+            ICacheService<AzureAdSettings> cacheService)
         {
             _settingsService = settingsService;
+            _cacheService = cacheService;
         }
 
         /// <summary>
@@ -27,6 +32,9 @@ namespace Authentication.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("settings/active-directory")]
-        public IActionResult Get() => Ok(_settingsService.GetAzureAdSettings());
+        public IActionResult Get() 
+        {
+            return Ok(_settingsService.GetAzureAdSettings());
+        }
     }
 }

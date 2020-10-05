@@ -25,6 +25,7 @@ namespace Authentication
 
             /// Transient DI of SettingsService.
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient(typeof(ICacheService<>), typeof(CacheService<>));
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -40,7 +41,6 @@ namespace Authentication
             app.UseRouting();
 
             app.UseCookiePolicy();
-            app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
             

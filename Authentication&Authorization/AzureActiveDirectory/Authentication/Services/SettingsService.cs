@@ -11,13 +11,26 @@ namespace Authentication.Services
     public class SettingsService : ISettingsService
     {
         private readonly AzureAdSettings _azureAdSettings;
-        public SettingsService(IOptions<AzureAdSettings> options)
+        private readonly ICacheService<AzureAdSettings> _cacheService;
+
+        public SettingsService(IOptions<AzureAdSettings> options,
+            ICacheService<AzureAdSettings> cacheService)
         {
             _azureAdSettings = options.Value;
+            _cacheService = cacheService;
         }
+
+
         public AzureAdSettings GetAzureAdSettings()
         {
-            return _azureAdSettings;
+            var value = _cacheService.TryGetValue(1);
+            if (value == null)
+            {
+                _cacheService.SetValue(1, _azureAdSettings);
+                return _azureAdSettings;
+            }
+
+            return value;
         }
     }
 }
