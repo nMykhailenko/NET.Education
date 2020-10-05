@@ -28,7 +28,6 @@ namespace Authentication.Middlewares
                 context.Response.Headers.Add("request-id", requetId);
 
             await _next(context);
-
         }
     }
 }
