@@ -30,6 +30,8 @@ namespace Authentication
         public void ConfigureServices(IServiceCollection services)
         {
             var azureAdSettings = Configuration.GetSection(nameof(AzureAdSettings)).Get<AzureAdSettings>();
+            services.Configure<AzureAdSettings>(x => Configuration.GetSection(nameof(AzureAdSettings)).Bind(x));
+
             services.Configure<CookiePolicyOptions>(options =>
             {
 
