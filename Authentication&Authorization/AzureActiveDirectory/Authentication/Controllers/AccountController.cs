@@ -1,4 +1,5 @@
-﻿using Authentication.Settings;
+﻿using Authentication.Models.RequestModels;
+using Authentication.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -34,11 +35,8 @@ namespace Authentication.Controllers
 
         [HttpPost]
         [Route("login")]
-        [Authorize(Policy = "custompolicy")]
-        public async Task<IActionResult> Login()
+        public async Task<IActionResult> Login([FromBody]LoginRequestModel loginRequest)
         {
-            AzureAdSettings a = null;
-            var t = a.ClientId;
             var url = $"{_azureAdSettings.Instance}{_azureAdSettings.TenantId}/oauth2/v2.0/token";
             var httpClient = new HttpClient();
             var result = await httpClient.PostAsync(url, CreateClientCredentialsGrantContent());

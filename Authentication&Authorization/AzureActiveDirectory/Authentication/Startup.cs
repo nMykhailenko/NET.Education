@@ -1,5 +1,6 @@
 using Authentication.Configuration.Injection;
 using Authentication.Configuration.Module;
+using Authentication.Filters;
 using Authentication.Middlewares;
 using Authentication.Services;
 using Authentication.Services.Contract;
@@ -29,7 +30,10 @@ namespace Authentication
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient(typeof(ICacheService<>), typeof(CacheService<>));
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options => 
+            {
+                options.Filters.Add(new ModelValidationFilter());
+            });
             services.AddRazorPages();
         }
 
