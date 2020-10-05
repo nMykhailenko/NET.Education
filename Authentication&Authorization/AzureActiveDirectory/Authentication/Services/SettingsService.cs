@@ -44,6 +44,7 @@ namespace Authentication.Services
         {
             using IDbConnection db = new SqlConnection(_sqlSettings.DefaultConnectionString);
             const string query = "select top 1 * from AzureAdSettings";
+
             return db.QueryFirst<AzureAdSettings>(query);
         }
     }

@@ -1,8 +1,11 @@
-﻿using Authentication.Configuration.Injection.Contract;
+﻿using Authentication.Authorization.Handlers;
+using Authentication.Authorization.Requirement;
+using Authentication.Configuration.Injection.Contract;
 using Authentication.Settings;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -40,14 +43,18 @@ namespace Authentication.Configuration.Module
                 options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
 
             });
-            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                 .AddAzureAD(options => _configuration.Bind(nameof(AzureAdSettings), options));
+            services
+                .AddAuthorization()
+                .AddAuthentication(AzureADDefaults.AuthenticationScheme)
+                .AddAzureAD(options => _configuration.Bind(nameof(AzureAdSettings), options));
 
             services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
             {
                 options.Authority = $"{azureAdSettings.Instance}{azureAdSettings.TenantId}/v2.0";
                 options.TokenValidationParameters.ValidateIssuer = false;
             });
+
+            services.AddScoped<IAuthorizationHandler, RoleRequirementHandler>();
 
             return services;
         }

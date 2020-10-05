@@ -1,5 +1,8 @@
-﻿using Authentication.Services.Contract;
+﻿using Authentication.Authorization.Attributes;
+using Authentication.Services.Contract;
 using Authentication.Settings;
+using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -32,6 +35,7 @@ namespace Authentication.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("settings/active-directory")]
+        [Role(new[] { "customrole"})]
         public IActionResult Get() 
         {
             return Ok(_settingsService.GetAzureAdSettings());

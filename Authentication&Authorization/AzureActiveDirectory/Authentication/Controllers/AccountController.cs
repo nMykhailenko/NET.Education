@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -33,6 +34,7 @@ namespace Authentication.Controllers
 
         [HttpPost]
         [Route("login")]
+        [Authorize(Policy = "custompolicy")]
         public async Task<IActionResult> Login()
         {
             AzureAdSettings a = null;
