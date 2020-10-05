@@ -35,6 +35,8 @@ namespace Authentication.Controllers
         [Route("login")]
         public async Task<IActionResult> Login()
         {
+            AzureAdSettings a = null;
+            var t = a.ClientId;
             var url = $"{_azureAdSettings.Instance}{_azureAdSettings.TenantId}/oauth2/v2.0/token";
             var httpClient = new HttpClient();
             var result = await httpClient.PostAsync(url, CreateClientCredentialsGrantContent());

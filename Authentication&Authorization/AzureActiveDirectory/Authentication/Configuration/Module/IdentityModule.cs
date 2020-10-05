@@ -33,22 +33,11 @@ namespace Authentication.Configuration.Module
             var azureAdSettings = _configuration.GetSection(nameof(AzureAdSettings)).Get<AzureAdSettings>();
             services.Configure<AzureAdSettings>(x => _configuration.GetSection(nameof(AzureAdSettings)).Bind(x));
 
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.Unspecified;
-
-            });
-            services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-                 .AddAzureAD(options => _configuration.Bind(nameof(AzureAdSettings), options));
-
-            services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
-            {
-                options.Authority = $"{azureAdSettings.Instance}{azureAdSettings.TenantId}/v2.0";
-                options.TokenValidationParameters.ValidateIssuer = false;
-            });
-
+            services.AddIdentityServer()
+                .AddInMemoryIdentityResources(IdentityServerConfig.GetIdentityResources())
+                .AddInMemoryApiResources(IdentityServerConfig.GetApis())
+                .AddInMemoryClients(IdentityServerConfig.GetClients());
+            
             return services;
         }
     }
