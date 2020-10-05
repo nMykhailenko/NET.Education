@@ -3,6 +3,7 @@ using Authentication.Configuration.Module;
 using Authentication.Middlewares;
 using Authentication.Services;
 using Authentication.Services.Contract;
+using Authentication.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,7 @@ namespace Authentication
         public void ConfigureServices(IServiceCollection services)
         {
             services.RegisterModule(new IdentityModule(Configuration));
+            services.Configure<SqlSettings>(x => Configuration.GetSection(nameof(SqlSettings)).Bind(x));
 
             /// Transient DI of SettingsService.
             services.AddTransient<ISettingsService, SettingsService>();

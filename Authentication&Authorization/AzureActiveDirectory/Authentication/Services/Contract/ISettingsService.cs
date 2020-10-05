@@ -16,5 +16,7 @@ namespace Authentication.Services.Contract
         /// </summary>
         /// <returns>Azure active directory configuration.</returns>
         AzureAdSettings GetAzureAdSettings();
+
+        AzureAdSettings GetAzureAdSettingsDb();
     }
 }
